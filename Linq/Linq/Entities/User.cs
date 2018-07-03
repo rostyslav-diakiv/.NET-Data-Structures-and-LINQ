@@ -1,52 +1,30 @@
 ﻿namespace Linq.Entities
 {
-    using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
 
     using Linq.Models;
 
-    public class User
+    public class User : UserModel
     {
         public User() { }
 
-        public User(UserModel model, IEnumerable<TodoModel> todoModels)
+        public User(UserModel model, IEnumerable<TodoModel> todoModels, IEnumerable<Post> posts) : base(model)
         {
-            Id = model.Id;
-            CreatedAt = model.CreatedAt;
-            Name = model.Name;
-            Email = model.Email;
-            Avatar = model.Avatar;
             TodoModels = new List<TodoModel>(todoModels);
+            Posts = new List<Post>(posts);
         }
 
-        public User Initialize(UserModel model, IEnumerable<TodoModel> todoModels)
-        {
-            Id = model.Id;
-            CreatedAt = model.CreatedAt;
-            Name = model.Name;
-            Email = model.Email;
-            Avatar = model.Avatar;
-            TodoModels = new List<TodoModel>(todoModels);
-
-            return this;
-        }
-
-        // 6 - витягнути всі пости всіх юзерів(таяк витягнути всіх працівників усіх компаній) і тоді вже робити вибірку
-
-        public int Id { get; set; }
-
-        public DateTime CreatedAt { get; set; }
-
-        public string Name { get; set; }
-
-        [EmailAddress]
-        public string Email { get; set; }
-
-        public Uri Avatar { get; set; }
+        public User(User model, IEnumerable<TodoModel> todos) : this(model, todos, model.Posts) { }
 
         public List<Post> Posts { get; set; }
 
         public List<TodoModel> TodoModels { get; set; }
+
+        /// <summary>Returns a string that represents the current object.</summary>
+        /// <returns>A string that represents the current object.</returns>
+        public override string ToString()
+        {
+            return $"User id: {Id}, Name: {Name}";
+        }
     }
 }

@@ -1,39 +1,25 @@
-﻿using System;
-
-namespace Linq.Entities
+﻿namespace Linq.Entities
 {
     using System.Collections.Generic;
 
     using Linq.Models;
 
-    public class Post
+    public class Post : PostModel
     {
         public Post() { }
 
-        public Post(PostModel postModel, IEnumerable<CommentModel> comments)
+        public Post(PostModel postModel, IEnumerable<CommentModel> comments) : base(postModel)
         {
-            Id = postModel.Id;
-            CreatedAt = postModel.CreatedAt;
-            Body = postModel.Body;
-            Likes = postModel.Likes;
-            Title = postModel.Title;
-            UserId = postModel.UserId;
             Comments = new List<CommentModel>(comments);
         }
 
-
-        public int Id { get; set; }
-
-        public DateTime CreatedAt { get; set; }
-
-        public string Body { get; set; }
-
-        public int Likes { get; set; }
-
-        public string Title { get; set; }
-
-        public int UserId { get; set; }
-
         public List<CommentModel> Comments { get; set; }
+
+        /// <summary>Returns a string that represents the current object.</summary>
+        /// <returns>A string that represents the current object.</returns>
+        public override string ToString()
+        {
+            return $"Post id: {Id}, Title: {Title}, CreatedAt: {CreatedAt}";
+        }
     }
 }
