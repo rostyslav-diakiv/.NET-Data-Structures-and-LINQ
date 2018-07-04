@@ -6,9 +6,10 @@ namespace Linq.Services
     using System.Linq;
 
     using Linq.Entities;
+    using Linq.Interfaces;
     using Linq.Models;
 
-    public class QueryService
+    public class QueryService : IQueryService
     {
         private readonly IEnumerable<User> _users;
         public QueryService() { }
@@ -30,7 +31,10 @@ namespace Linq.Services
         {
             Console.WriteLine("Query #1");
             Console.WriteLine($"Number of comments under User's posts for user with id: {userId}");
-            if (posts == null) return;
+            if (posts == null)
+            {
+                Console.WriteLine($"User with id: {userId} not found"); return;
+            }
 
             foreach (var p in posts)
             {
@@ -52,6 +56,11 @@ namespace Linq.Services
         {
             Console.WriteLine("Query #2");
             Console.WriteLine($"Comments below User's posts for user with id: {userId}");
+            if (comments == null)
+            {
+                Console.WriteLine($"User with id: {userId} not found"); return;
+            }
+
             foreach (var c in comments)
             {
                 Console.WriteLine(c);
@@ -72,6 +81,11 @@ namespace Linq.Services
         {
             Console.WriteLine("Query #3");
             Console.WriteLine($"Completed Todos for user with id: {userId}");
+            if (completedTodos == null)
+            {
+                Console.WriteLine($"User with id: {userId} not found"); return;
+            }
+
             foreach (var t in completedTodos)
             {
                 Console.WriteLine($"Todo id:{t.id}, name: {t.name}");
@@ -87,16 +101,21 @@ namespace Linq.Services
             return sortedUsers;
         }
 
-        public static void ShowQuery4(IEnumerable<User> users, int skip = 0, int take = 15)
+        public void ShowQuery4(IEnumerable<User> users, int skip = 0, int take = 15)
         {
             Console.WriteLine("Query #4");
             Console.WriteLine("Users sorted by Name ascending with Todos sorted by Name Lenght by descending:");
+            if (users == null)
+            {
+                Console.WriteLine("Users not found"); return;
+            }
+
             foreach (var u in users.Skip(skip).Take(take))
             {
                 Console.WriteLine($"User id: {u.Id}, name: {u.Name}, Todos: ");
                 foreach (var t in u.TodoModels)
                 {
-                    Console.WriteLine($"Todo id:{t.Id}, name: {t.Name}");
+                    Console.WriteLine(t);
                 }
                 Console.WriteLine();
             }
@@ -113,7 +132,7 @@ namespace Linq.Services
                                  u.Posts.OrderByDescending(p => p.CreatedAt).FirstOrDefault()?.Comments.Count,
                                  u.TodoModels.Count(t => !t.IsComplete),
                                  u.Posts.OrderByDescending(p => p.Comments.Count(c => c.Body.Length > 80)).FirstOrDefault(),
-                                 u.Posts.OrderByDescending(p => p.Likes).FirstOrDefault())).First();
+                                 u.Posts.OrderByDescending(p => p.Likes).FirstOrDefault())).FirstOrDefault();
 
             return tuple;
         }
@@ -121,6 +140,10 @@ namespace Linq.Services
         public void ShowQuery5((User user, Post lastPost, int? lastPostCommentsAmount, int uncompletedTasksAmount, Post popPost, Post popPostLikes) complexTuple)
         {
             Console.WriteLine("Query #5");
+            //if (complexTuple == null)
+            //{
+
+            //}
             Console.WriteLine(complexTuple.user);
             Console.WriteLine($"Last user's post: {complexTuple.lastPost}");
             Console.WriteLine($"Number of Comments under last user's post: {complexTuple.lastPostCommentsAmount}");

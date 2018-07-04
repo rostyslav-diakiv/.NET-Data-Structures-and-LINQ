@@ -3,7 +3,9 @@
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    public class UserModel
+    using Linq.Interfaces;
+
+    public class UserModel : IUserModel
     {
         public UserModel() { }
 

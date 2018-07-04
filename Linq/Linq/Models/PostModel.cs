@@ -2,7 +2,9 @@
 
 namespace Linq.Models
 {
-    public class PostModel
+    using Linq.Interfaces;
+
+    public class PostModel : IPostModel
     {
         public PostModel() { }
 

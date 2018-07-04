@@ -2,7 +2,9 @@
 
 namespace Linq.Models
 {
-    public class CommentModel
+    using Linq.Interfaces;
+
+    public class CommentModel : ICommentModel
     {
         public CommentModel() { }
 
